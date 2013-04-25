@@ -69,10 +69,11 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
 
                 except twitter.TwitterError as e:
                     # if we already fav'd just ignore and go to next
-                    print "Already favorited tweet %s or got API rate limited or other error" % status.id
                     if "favorite per day" in e.message:
                         print "Rate limited by Twitter, waiting a while before we try again."
-                        time.sleep(60)
+                        time.sleep(60 * 60)
+                    else:
+                        print "Already favorited tweet %s or some other error"  % status.id
                     pass
                 except:
                     raise
