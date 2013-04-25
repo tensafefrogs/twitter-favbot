@@ -50,9 +50,9 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
             if not status.GetInReplyToScreenName():
                 # it's probably ok to fav more than once, the request
                 # will just fail
-                print "Favoriting tweet: %s from %s" % (status.id, status.user.screen_name)
                 try:
                     api.CreateFavorite(status)
+                    print "Favorited tweet: %s from %s" % (status.id, status.user.screen_name)
                     # wait a few seconds before continuing so we don't piss of twitter
                     time.sleep(10)
 
@@ -60,6 +60,7 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
                     update_self_favorites_list_and_find_tweet_to_favorite(api)
                 except twitter.TwitterError:
                     # if we already fav'd just ignore and go to next
+                    print "Already favorited tweet %s" % status.id
                     pass
                 except:
                     raise
