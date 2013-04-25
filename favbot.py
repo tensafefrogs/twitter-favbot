@@ -54,7 +54,7 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
                 try:
                     api.CreateFavorite(status)
                     # wait a few seconds before continuing so we don't piss of twitter
-                    time.sleep(4)
+                    time.sleep(10)
 
                     # do it all again!
                     update_self_favorites_list_and_find_tweet_to_favorite(api)
