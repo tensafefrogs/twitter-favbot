@@ -43,9 +43,9 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
     print "Already faved ids: %s" % faved_ids
     print "Finding tweet to fav now"
     search_results = api.GetSearch('snap -"RT"')
-    print search_results
+    #print search_results
     for status in search_results:
-        print "Status id to check: %s" % status.id
+        #print "Status id to check: %s" % status.id
         if status.id not in faved_ids:
             if not status.GetInReplyToScreenName():
                 # it's probably ok to fav more than once, the request
