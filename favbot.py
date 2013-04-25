@@ -3,6 +3,14 @@
 import ConfigParser
 import time
 import twitter
+from random import choice
+
+searches = [
+    u"snap",
+    u"@cah",
+    u'"cards against humanity"',
+    u'"apples to apples"'
+]
 
 def startup():
     config = ConfigParser.ConfigParser()
@@ -36,13 +44,15 @@ def startup():
 def update_self_favorites_list_and_find_tweet_to_favorite(api):
     my_favs = api.GetFavorites()
     print my_favs
-    faved_users = []
+    faved_users = ["CAH"]
     # key by id to make checking for fav'd tweets easy
     for faved in my_favs:
         faved_users.append(faved.user.screen_name)
     print "Already faved users: %s" % faved_users
     print "Finding tweet to fav now"
-    search_results = api.GetSearch('snap -"RT"')
+    rando_search = "%s -'RT'" % choice(searches)
+    print "Searching for '%s'" % rando_search
+    search_results = api.GetSearch(rando_search)
     #print search_results
     for status in search_results:
         #print "Status id to check: %s" % status.id
@@ -53,17 +63,22 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
                 try:
                     api.CreateFavorite(status)
                     print "Favorited tweet: %s from %s" % (status.id, status.user.screen_name)
+                    print status.text
                     # wait a few seconds before continuing so we don't piss of twitter
                     time.sleep(10)
 
-                    # do it all again!
-                    update_self_favorites_list_and_find_tweet_to_favorite(api)
-                except twitter.TwitterError:
+                except twitter.TwitterError as e:
                     # if we already fav'd just ignore and go to next
-                    print "Already favorited tweet %s" % status.id
+                    print "Already favorited tweet %s or got API rate limited or other error" % status.id
+                    if "favorite per day" in e.message:
+                        print "Rate limited by Twitter, waiting a while before we try again."
+                        time.sleep(60)
                     pass
                 except:
                     raise
+    # do it all again!
+    time.sleep(2)
+    update_self_favorites_list_and_find_tweet_to_favorite(api)
 
 
 
