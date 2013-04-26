@@ -6,7 +6,7 @@ import twitter
 from random import choice
 
 searches = [
-    u"snap chat",
+    #u"snap chat",
     u"@cah",
     u'"cards against humanity"',
     u'"apples to apples"'
