@@ -77,6 +77,10 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
                 pass
             except:
                 raise
+        else:
+            print "Has Snap in screen name, or is reply... trying again..."
+    else:
+        print "Already faved user, trying again..."
     # do it all again!
     time.sleep(2)
     update_self_favorites_list_and_find_tweet_to_favorite(api)
