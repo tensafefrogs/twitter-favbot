@@ -56,7 +56,7 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
     status = choice(search_results)
     #print "Status id to check: %s" % status.id
     if status.user.screen_name not in faved_users:
-        not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
+        if not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
             # it's probably ok to fav more than once, the request
             # will just fail
             try:
