@@ -51,7 +51,7 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
     print "Finding tweet to fav now..."
     rando_search = "%s -'RT'" % choice(searches)
     print "Searching for '%s'" % rando_search
-    search_results = api.GetSearch(term=rando_search, per_page=50, result_type='recent')
+    search_results = api.GetSearch(term=rando_search, per_page=50, result_type="recent")
     # filter for iPhone clients since we want them to download the game
     filtered_results = [x for x in search_results if "iphone" in x.source.lower()]
     status = choice(filtered_results)
