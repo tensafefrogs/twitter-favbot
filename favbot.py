@@ -6,7 +6,7 @@ import twitter
 from random import choice
 
 searches = [
-    #u"snap",
+    u"snap chat",
     u"@cah",
     u'"cards against humanity"',
     u'"apples to apples"'
@@ -42,18 +42,19 @@ def setup_api():
 
 def update_self_favorites_list_and_find_tweet_to_favorite(api):
     my_favs = api.GetFavorites()
-    print my_favs
+    #print my_favs
     faved_users = ["CAH"]
     # key by id to make checking for fav'd tweets easy
     for faved in my_favs:
         faved_users.append(faved.user.screen_name)
-    print "Already faved users: %s" % faved_users
-    print "Finding tweet to fav now"
+    #print "Already faved users: %s" % faved_users
+    print "Finding tweet to fav now..."
     rando_search = "%s -'RT'" % choice(searches)
     print "Searching for '%s'" % rando_search
     search_results = api.GetSearch(rando_search)
-    #print search_results
-    status = choice(search_results)
+    # filter for iPhone clients since we want them to download the game
+    filtered_results = [x for x in search_results if "iphone" in x.source.lower()]
+    status = choice(filtered_results)
     #print "Status id to check: %s" % status.id
     if status.user.screen_name not in faved_users:
         if not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
