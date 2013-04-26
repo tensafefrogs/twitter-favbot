@@ -12,7 +12,7 @@ searches = [
     u'"apples to apples"'
 ]
 
-def startup():
+def setup_api():
     config = ConfigParser.ConfigParser()
     config.read('snapsnapgo-favbot.cfg')
 
@@ -37,8 +37,7 @@ def startup():
         raise
     except:
         raise
-
-    update_self_favorites_list_and_find_tweet_to_favorite(api)
+    return api
 
 
 def update_self_favorites_list_and_find_tweet_to_favorite(api):
@@ -57,15 +56,14 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
     status = choice(search_results)
     #print "Status id to check: %s" % status.id
     if status.user.screen_name not in faved_users:
-        if not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
+        not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
             # it's probably ok to fav more than once, the request
             # will just fail
             try:
                 api.CreateFavorite(status)
                 print "Favorited tweet: %s from %s" % (status.id, status.user.screen_name)
                 print status.text
-                # wait a few seconds before continuing so we don't piss of twitter
-                time.sleep(60)
+                print "-----"
 
             except twitter.TwitterError as e:
                 # if we already fav'd just ignore and go to next
@@ -74,21 +72,24 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
                     time.sleep(60 * 60)
                 else:
                     print "Already favorited tweet %s or some other error"  % status.id
+                    print "Error is: %s" % e.message
                 pass
             except:
                 raise
         else:
+            print "%s - %s" % (status.user.screen_name, status.text)
             print "Has Snap in screen name, or is reply... trying again..."
     else:
-        print "Already faved user, trying again..."
-    # do it all again!
-    time.sleep(2)
-    update_self_favorites_list_and_find_tweet_to_favorite(api)
-
-
+        print "Already faved user %s, trying again..." % status.user.screen_name
 
 
 if __name__ == "__main__":
     print "Starting up!"
-    startup()
+    api = setup_api()
+    # run forever!
+    while(True):
+        update_self_favorites_list_and_find_tweet_to_favorite(api)
+        time.sleep(30)
+
+
 
