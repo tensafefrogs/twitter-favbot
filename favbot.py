@@ -6,7 +6,7 @@ import twitter
 from random import choice
 
 searches = [
-    u"snap",
+    #u"snap",
     u"@cah",
     u'"cards against humanity"',
     u'"apples to apples"'
@@ -54,29 +54,29 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
     print "Searching for '%s'" % rando_search
     search_results = api.GetSearch(rando_search)
     #print search_results
-    for status in search_results:
-        #print "Status id to check: %s" % status.id
-        if status.user.screen_name not in faved_users:
-            if not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
-                # it's probably ok to fav more than once, the request
-                # will just fail
-                try:
-                    api.CreateFavorite(status)
-                    print "Favorited tweet: %s from %s" % (status.id, status.user.screen_name)
-                    print status.text
-                    # wait a few seconds before continuing so we don't piss of twitter
-                    time.sleep(10)
+    status = choice(search_results)
+    #print "Status id to check: %s" % status.id
+    if status.user.screen_name not in faved_users:
+        if not status.GetInReplyToScreenName() and not "snap" in status.user.screen_name.lower() and not status.text[0] == "@":
+            # it's probably ok to fav more than once, the request
+            # will just fail
+            try:
+                api.CreateFavorite(status)
+                print "Favorited tweet: %s from %s" % (status.id, status.user.screen_name)
+                print status.text
+                # wait a few seconds before continuing so we don't piss of twitter
+                time.sleep(60)
 
-                except twitter.TwitterError as e:
-                    # if we already fav'd just ignore and go to next
-                    if "favorite per day" in e.message:
-                        print "Rate limited by Twitter, waiting a while before we try again."
-                        time.sleep(60 * 60)
-                    else:
-                        print "Already favorited tweet %s or some other error"  % status.id
-                    pass
-                except:
-                    raise
+            except twitter.TwitterError as e:
+                # if we already fav'd just ignore and go to next
+                if "favorite per day" in e.message:
+                    print "Rate limited by Twitter, waiting a while before we try again."
+                    time.sleep(60 * 60)
+                else:
+                    print "Already favorited tweet %s or some other error"  % status.id
+                pass
+            except:
+                raise
     # do it all again!
     time.sleep(2)
     update_self_favorites_list_and_find_tweet_to_favorite(api)
