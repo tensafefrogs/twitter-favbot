@@ -7,6 +7,7 @@ from random import choice
 
 searches = [
     #u"snap chat",
+    u"#cardsagainsthumanity",
     u"@cah",
     u'"cards against humanity"',
     u'"apples to apples"'
