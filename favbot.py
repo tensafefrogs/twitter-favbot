@@ -10,7 +10,9 @@ searches = [
     u"#cardsagainsthumanity",
     u"@cah",
     u'"cards against humanity"',
-    u'"apples to apples"'
+    u'"apples to apples"',
+    u'snap-snap-go',
+    u'snapsnapgame'
 ]
 
 def setup_api():
