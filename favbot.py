@@ -77,8 +77,11 @@ def update_self_favorites_list_and_find_tweet_to_favorite(api):
                     print "Already favorited tweet %s or some other error"  % status.id
                     print "Error is: %s" % e.message
                 pass
-            except:
-                raise
+            except Exception as e:
+                print "Other error creating fav:"
+                print e.message
+                pass
+                #raise
         else:
             print "%s - %s" % (status.user.screen_name, status.text)
             print "Has Snap in screen name, or is reply... trying again..."
