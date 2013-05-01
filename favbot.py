@@ -44,7 +44,10 @@ def setup_api():
 
 
 def update_self_favorites_list_and_find_tweet_to_favorite(api):
-    my_favs = api.GetFavorites()
+    try:
+        my_favs = api.GetFavorites()
+    except:
+        return
     #print my_favs
     faved_users = ["CAH"]
     # key by id to make checking for fav'd tweets easy
