@@ -99,8 +99,13 @@ if __name__ == "__main__":
     api = setup_api()
     # run forever!
     while(True):
-        update_self_favorites_list_and_find_tweet_to_favorite(api)
+        try:
+            update_self_favorites_list_and_find_tweet_to_favorite(api)
+        except Exception:
+            print "Exception, trying again..."
+            pass
         time.sleep(30)
+
 
 
 
